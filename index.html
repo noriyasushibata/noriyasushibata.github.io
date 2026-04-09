@@ -31,6 +31,14 @@
       padding-bottom: 10px;
       margin-bottom: 20px;
     }
+    #search {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 20px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      font-size: 16px;
+    }
     table {
       width: 100%;
       border-collapse: collapse;
@@ -66,6 +74,7 @@
 
     <div class="section">
       <h2>ESA Member Space Agencies</h2>
+      <input type="text" id="search" placeholder="Search agencies by name, city, or country...">
       <table id="agencies-table">
         <thead>
           <tr>
@@ -89,47 +98,95 @@
 
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   <script>
+    let agencies = [];
+    let markers = [];
+    let map;
+
     // Load agency data
     fetch('esa_agencies.json')
       .then(response => response.json())
       .then(data => {
-        // Populate table
-        const tbody = document.querySelector('#agencies-table tbody');
-        data.forEach(agency => {
-          const row = document.createElement('tr');
-          row.innerHTML = `
-            <td>${agency.name}</td>
-            <td>${agency.city}</td>
-            <td>${agency.country}</td>
-            <td>${agency.address}</td>
-            <td>${agency.lat}</td>
-            <td>${agency.lng}</td>
-          `;
-          tbody.appendChild(row);
-        });
-
-        // Initialize map
-        const map = L.map('map').setView([50, 10], 4); // Centered on Europe
-
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-          attribution: '© OpenStreetMap contributors'
-        }).addTo(map);
-
-        // Add markers
-        data.forEach(agency => {
-          const marker = L.marker([agency.lat, agency.lng]).addTo(map);
-          marker.bindPopup(`
-            <b>${agency.name}</b><br>
-            ${agency.city}, ${agency.country}<br>
-            ${agency.address}
-          `);
-        });
-
-        // Fit map to show all markers
-        const group = new L.featureGroup(data.map(agency => L.marker([agency.lat, agency.lng])));
-        map.fitBounds(group.getBounds().pad(0.1));
+        agencies = data;
+        populateTable(data);
+        initializeMap(data);
       })
       .catch(error => console.error('Error loading data:', error));
+
+    function populateTable(data) {
+      const tbody = document.querySelector('#agencies-table tbody');
+      tbody.innerHTML = '';
+      data.forEach((agency, index) => {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+          <td>${agency.name}</td>
+          <td>${agency.city}</td>
+          <td>${agency.country}</td>
+          <td>${agency.address}</td>
+          <td>${agency.lat}</td>
+          <td>${agency.lng}</td>
+        `;
+        row.style.cursor = 'pointer';
+        row.addEventListener('click', () => zoomToMarker(index));
+        tbody.appendChild(row);
+      });
+    }
+
+    function initializeMap(data) {
+      map = L.map('map').setView([50, 10], 4); // Centered on Europe
+
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '© OpenStreetMap contributors'
+      }).addTo(map);
+
+      // Add markers
+      data.forEach((agency, index) => {
+        const marker = L.marker([agency.lat, agency.lng]);
+        marker.bindPopup(`
+          <b>${agency.name}</b><br>
+          ${agency.city}, ${agency.country}<br>
+          ${agency.address}
+        `);
+        marker.addTo(map);
+        markers.push(marker);
+      });
+
+      // Fit map to show all markers
+      const group = new L.featureGroup(markers);
+      map.fitBounds(group.getBounds().pad(0.1));
+    }
+
+    function zoomToMarker(index) {
+      const agency = agencies[index];
+      map.setView([agency.lat, agency.lng], 10);
+      markers[index].openPopup();
+    }
+
+    // Search functionality
+    document.getElementById('search').addEventListener('input', function() {
+      const query = this.value.toLowerCase();
+      const filteredAgencies = agencies.filter(agency =>
+        agency.name.toLowerCase().includes(query) ||
+        agency.city.toLowerCase().includes(query) ||
+        agency.country.toLowerCase().includes(query)
+      );
+      populateTable(filteredAgencies);
+
+      // Show/hide markers
+      markers.forEach((marker, index) => {
+        if (filteredAgencies.includes(agencies[index])) {
+          map.addLayer(marker);
+        } else {
+          map.removeLayer(marker);
+        }
+      });
+
+      // Adjust map bounds if filtered
+      if (filteredAgencies.length > 0) {
+        const filteredMarkers = filteredAgencies.map(agency => markers[agencies.indexOf(agency)]);
+        const group = new L.featureGroup(filteredMarkers);
+        map.fitBounds(group.getBounds().pad(0.1));
+      }
+    });
   </script>
 </body>
 </html>

@@ -1,0 +1,30 @@
+[
+  {
+    "name": "Alice",
+    "age": 30,
+    "occupation": "Engineer",
+    "timezone": "PST",
+    "availability": "Mon-Fri, 9am-5pm"
+  },
+  {
+    "name": "Bob",
+    "age": 25,
+    "occupation": "Designer",
+    "timezone": "EST",
+    "availability": "Mon-Thu, 10am-6pm"
+  },
+  {
+    "name": "Carol",
+    "age": 27,
+    "occupation": "Writer",
+    "timezone": "CST",
+    "availability": "Mon-Thu, 8am-4pm"
+  },
+  {
+    "name": "Nori",
+    "age": 55,
+    "occupation": "Lawyer",
+    "timezone": "PST",
+    "availability": "Mon-Fri, 9am-6pm"
+  }
+]

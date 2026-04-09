@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Project Timeline - Gantt Diagram</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f5f7fa;
+      margin: 0;
+      padding: 20px;
+    }
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      background: white;
+      border-radius: 8px;
+      padding: 30px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    h1 {
+      text-align: center;
+      color: #333;
+      margin: 0 0 10px 0;
+    }
+    .subtitle {
+      text-align: center;
+      color: #666;
+      margin: 0 0 30px 0;
+    }
+    .gantt-chart {
+      width: 100%;
+      overflow-x: auto;
+      border: 2px solid #ddd;
+      border-radius: 8px;
+      margin-bottom: 30px;
+      background: white;
+    }
+    .gantt-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+    }
+    .gantt-table th {
+      background: #f0f0f0;
+      padding: 12px;
+      text-align: left;
+      border-bottom: 2px solid #ddd;
+      font-weight: bold;
+    }
+    .gantt-table td {
+      padding: 12px;
+      border-bottom: 1px solid #eee;
+    }
+    .phase-name {
+      width: 150px;
+      font-weight: bold;
+      color: #333;
+    }
+    .gantt-bar {
+      height: 30px;
+      display: inline-block;
+      border-radius: 4px;
+      line-height: 30px;
+      color: white;
+      text-align: center;
+      font-size: 12px;
+      font-weight: bold;
+    }
+    .phase1 { background: #ef4444; }
+    .phase2 { background: #3b82f6; }
+    .phase3 { background: #10b981; }
+    .phase4 { background: #f59e0b; }
+    .phase5 { background: #8b5cf6; }
+    
+    .info-section {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 30px;
+    }
+    .info-box {
+      padding: 20px;
+      background: #f9f9f9;
+      border-left: 4px solid #667eea;
+      border-radius: 4px;
+    }
+    .info-box h3 {
+      margin-top: 0;
+      color: #333;
+    }
+    .phase-detail {
+      margin-bottom: 12px;
+      padding: 10px;
+      background: white;
+      border-radius: 4px;
+      border-left: 4px solid;
+    }
+    .phase-detail.p1 { border-left-color: #ef4444; }
+    .phase-detail.p2 { border-left-color: #3b82f6; }
+    .phase-detail.p3 { border-left-color: #10b981; }
+    .phase-detail.p4 { border-left-color: #f59e0b; }
+    .phase-detail.p5 { border-left-color: #8b5cf6; }
+    
+    .phase-detail strong {
+      display: block;
+      color: #333;
+    }
+    .phase-detail span {
+      color: #666;
+      font-size: 13px;
+    }
+    .metrics-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    .metrics-list li {
+      padding: 8px 0;
+      border-bottom: 1px solid #eee;
+      color: #555;
+    }
+    .metrics-list li:last-child {
+      border-bottom: none;
+    }
+    
+    @media (max-width: 768px) {
+      .info-section {
+        grid-template-columns: 1fr;
+      }
+      .container {
+        padding: 15px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>📊 Project Timeline</h1>
+    <p class="subtitle">5 Overlapping Phases: August 2025 - January 2026</p>
+    
+    <div class="gantt-chart">
+      <table class="gantt-table">
+        <thead>
+          <tr>
+            <th style="width: 150px;">Phase</th>
+            <th style="width: 600px;">Timeline (Aug 2025 - Jan 2026)</th>
+            <th style="width: 150px;">Duration</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="phase-name">Phase 1: Planning</td>
+            <td style="padding: 8px;">
+              <div class="gantt-bar phase1" style="width: 15%;">Aug 1 - Sep 12</div>
+            </td>
+            <td>6 weeks</td>
+          </tr>
+          <tr>
+            <td class="phase-name">Phase 2: Design</td>
+            <td style="padding: 8px;">
+              <div class="gantt-bar phase2" style="width: 15%; margin-left: 3%;"></div>
+              <span style="color: #999; font-size: 12px;">Sep 4 - Oct 15</span>
+            </td>
+            <td>6 weeks</td>
+          </tr>
+          <tr>
+            <td class="phase-name">Phase 3: Development</td>
+            <td style="padding: 8px;">
+              <div class="gantt-bar phase3" style="width: 15%; margin-left: 6%;"></div>
+              <span style="color: #999; font-size: 12px;">Oct 8 - Nov 18</span>
+            </td>
+            <td>6 weeks</td>
+          </tr>
+          <tr>
+            <td class="phase-name">Phase 4: Testing</td>
+            <td style="padding: 8px;">
+              <div class="gantt-bar phase4" style="width: 15%; margin-left: 9%;"></div>
+              <span style="color: #999; font-size: 12px;">Nov 11 - Dec 22</span>
+            </td>
+            <td>6 weeks</td>
+          </tr>
+          <tr>
+            <td class="phase-name">Phase 5: Deployment</td>
+            <td style="padding: 8px;">
+              <div class="gantt-bar phase5" style="width: 15%; margin-left: 12%;"></div>
+              <span style="color: #999; font-size: 12px;">Dec 15 - Jan 26</span>
+            </td>
+            <td>6 weeks</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="info-section">
+      <div class="info-box">
+        <h3>📋 Phase Details</h3>
+        <div class="phase-detail p1">
+          <strong>Phase 1: Planning</strong>
+          <span>Aug 1 - Sep 12, 2025<br>6 weeks (42 days)</span>
+        </div>
+        <div class="phase-detail p2">
+          <strong>Phase 2: Design</strong>
+          <span>Sep 4 - Oct 15, 2025<br>6 weeks, 1-week overlap</span>
+        </div>
+        <div class="phase-detail p3">
+          <strong>Phase 3: Development</strong>
+          <span>Oct 8 - Nov 18, 2025<br>6 weeks, 1-week overlap</span>
+        </div>
+        <div class="phase-detail p4">
+          <strong>Phase 4: Testing</strong>
+          <span>Nov 11 - Dec 22, 2025<br>6 weeks, 1-week overlap</span>
+        </div>
+        <div class="phase-detail p5">
+          <strong>Phase 5: Deployment</strong>
+          <span>Dec 15 - Jan 26, 2026<br>6 weeks, 1-week overlap</span>
+        </div>
+      </div>
+
+      <div class="info-box">
+        <h3>✨ Project Metrics</h3>
+        <ul class="metrics-list">
+          <li><strong>Total Duration:</strong> 22 weeks</li>
+          <li><strong>Per Phase:</strong> 6 weeks (42 days)</li>
+          <li><strong>Phase Overlap:</strong> 1 week each</li>
+          <li><strong>Start Date:</strong> August 1, 2025</li>
+          <li><strong>End Date:</strong> January 26, 2026</li>
+          <li><strong>Key Benefit:</strong> Parallel execution enables faster delivery</li>
+          <li><strong>Design Type:</strong> Cascading with overlap</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
